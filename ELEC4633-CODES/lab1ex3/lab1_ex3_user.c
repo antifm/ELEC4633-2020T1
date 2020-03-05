@@ -3,7 +3,11 @@
 #include <rtai.h>
 #include <rtai_nam2num.h>
 #include <rtai_shm.h>
-#include <rtai_fifos.h>
+#include <sys/types.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <signal.h>
 
 int main(void)
 {
@@ -14,7 +18,7 @@ int main(void)
   udata = rtai_malloc(nam2num("count"), sizeof(int));
   // Open pipe as read only - return error message if failed
   if((FIFOcount = open("/dev/rtf0", O_RDONLY))<0){
-    printf("Error opening FIFO pipe");
+    fprintf(stderr,"Error opening FIFO pipe");
   }
 
   while(){

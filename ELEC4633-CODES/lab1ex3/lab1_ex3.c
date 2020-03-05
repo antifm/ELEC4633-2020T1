@@ -1,0 +1,74 @@
+#include <linux/module.h>
+#include <linux/init.h>
+
+#include <rtai.h>
+#include <rtai_sched.h>
+#include <rtai_fifos.h>
+#include <rtai_shm.h>
+
+#define ARG 0
+#define STACK_SIZE 1024
+#define PRIORITY RT_SCHED_HIGHEST_PRIORITY
+#define USE_FPU 1
+#define NOW rt_get_time()
+#define PERIOD nano2count(1e9)
+
+#define STATE0 0
+#define STATE1 1
+#define STATE2 2
+
+
+// Global variable
+short state = STATE0;
+
+// Data
+RT_TASK task1;
+RT_TASK task2;
+RT_TASK task3;
+
+// Code
+void task1_code(){
+  printk("\nTask 1 awake. ")
+  rt_task_suspend(&task3);
+  rt_task_resume(&task2);
+  rt_task_wait_period();
+}
+void task2_code(){
+  printk("\tTask 2 awake. ")
+  rt_task_suspend(&task1);
+  rt_task_resume(&task3);
+}
+void task3_code(){
+  printk("\tTask 3 awake. ")
+  rt_task_suspend(&task2);
+  rt_task_make_periodic(&task1, NOW, PERIOD);
+}
+
+/* Called when "insmod" is used */
+static int __init template_init(void)
+{
+  // Start timer
+  rt_set_periodic_mode();
+  start_rt_timer(PERIOD);
+
+  /* Initialise the data associated with a thread and make it periodic */
+  rt_task_init(&task1, task1_code, ARG, STACK_SIZE, PRIORITY, USE_FPU, NULL);
+  rt_task_init(&task2, task2_code, ARG, STACK_SIZE, PRIORITY, USE_FPU, NULL);
+  rt_task_init(&task3, task3_code, ARG, STACK_SIZE, PRIORITY, USE_FPU, NULL);
+
+  rt_task_make_periodic(&task1, NOW, PERIOD);
+
+  return 0;
+}
+
+/* Called when "rmmod" is used */
+static void __exit template_exit(void)
+{
+  rt_task_delete(&task1);
+  rt_task_delete(&task2);
+  rt_task_delete(&task3);
+}
+
+module_init(template_init);
+module_exit(template_exit);
+
