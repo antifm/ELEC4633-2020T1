@@ -31,7 +31,6 @@ int increment_code()
     /* Add code here */
     counter = counter + 1;
     rt_task_wait_period();
-    // something
   }
 }
 
