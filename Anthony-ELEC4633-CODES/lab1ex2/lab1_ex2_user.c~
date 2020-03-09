@@ -25,7 +25,7 @@ int main(void)
     read(FIFOcount, &count, sizeof(count));   // Read pipe and save value into 'count' with sizeof 'count'
     printf("\tFIFO buffer: %d", count);
   }
-  rtai_free(nam2num("counter"),udata);
+  rtai_free(nam2num("counter"));
   return 0;
 }
 

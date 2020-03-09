@@ -1,7 +1,7 @@
 KDIR		:= /lib/modules/$(shell uname -r)/build
 PWD		:= $(shell pwd)
 EXTRA_CFLAGS	:= $(shell rtai-config --module-cflags)
-obj-m		:= lab1_ex2.o # change this for other kernel file compilation
+obj-m		:= lab1_ex2_user.o # change this for other kernel file compilation
 
 USER_CC		:= gcc
 USER_CFLAGS	:= -Wall $(shell rtai-config --lxrt-cflags)

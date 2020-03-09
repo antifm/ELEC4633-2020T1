@@ -1,0 +1,1 @@
+cmd_/home/elec4633/ELEC4633-CODES/lab1ex3/lab1_ex3.ko := ld -m elf_i386 -m elf_i386 -r -o /home/elec4633/ELEC4633-CODES/lab1ex3/lab1_ex3.ko /home/elec4633/ELEC4633-CODES/lab1ex3/lab1_ex3.o /home/elec4633/ELEC4633-CODES/lab1ex3/lab1_ex3.mod.o

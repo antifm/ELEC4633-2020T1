@@ -36,12 +36,17 @@ void task1_code(){
 }
 void task2_code(){
   printk("\tTask 2 awake. ");
+  //rt_get_task_state(&task2);
+  //rt_task_suspend(&task1);
   rt_task_resume(&task3);
+  //rt_task_wait_period();
 }
 void task3_code(){
   printk("\tTask 3 awake. ");
   rt_task_suspend(&task2);
   rt_task_resume(&task1);
+  //rt_task_make_periodic(&task1, NOW, PERIOD);
+  //rt_task_wait_period();
 }
 
 /* Called when "insmod" is used */
